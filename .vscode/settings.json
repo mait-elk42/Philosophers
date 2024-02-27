@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"philo.h": "c",
+		"_pthread_types.h": "c",
+		"pthread.h": "c",
+		"__locale": "c"
+	}
+}
