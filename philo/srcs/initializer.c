@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:51:06 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/02/27 11:25:52 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/02/28 18:22:58 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,12 @@ static int	_nsx_session_init3(t_session *session)
 	while (i < session->session_data.num_of_philos)
 	{
 		session->philos[i].id = i+1;
-		session->philos[i].n_of_meals = 0;
+		session->philos[i].n_of_meals = session->session_data.num_of_meals;
 		session->philos[i].session_data = &session->session_data;
 		session->philos[i].last_meal_time = session->session_data.start_time;
 		session->philos[i].printf_mutex = &session->printf_mutex;
 		if (pthread_mutex_init(&session->philos[i].time_mutex, NULL))
 			return (-1);
-		session->philos[i].n_of_meals = 0;
 		if (i == 0)
 			session->philos[i].left_fork = &session->forks[s_data.num_of_philos - 1];
 		else

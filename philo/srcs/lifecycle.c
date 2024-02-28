@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 16:42:32 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/02/27 13:49:33 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/02/28 19:24:20 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,10 @@ void	_nsx_philo_take_forks_eat(t_philo *philo)
 	_nsx_put_philo_status(philo, "is eating");
 	pthread_mutex_lock(&philo->time_mutex);
 	philo->last_meal_time = _nsx_get_time();
-	pthread_mutex_unlock(&philo->time_mutex);
 	_nsx_sleep(philo->session_data->time_to_eat);
-	philo->n_of_meals++;
+	if (philo->n_of_meals != -1)
+		philo->n_of_meals--;
+	pthread_mutex_unlock(&philo->time_mutex);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
