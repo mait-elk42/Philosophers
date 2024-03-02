@@ -6,26 +6,26 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:30:10 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/02/27 16:40:20 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/02 13:35:34 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-void	_nsx_putstr_fd(char	*str, int fd)
+void	nsx_putstr_fd(char	*str, int fd)
 {
 	if (str)
 		while (*str)
 			write(fd, str++, 1);
 }
 
-void	_nsx_free_session(t_session *session)
+void	nsx_free_session(t_session *session)
 {
 	free(session->forks);
 	free(session->philos);
 }
 
-size_t	_nsx_get_time(void)
+size_t	nsx_get_time(void)
 {
 	struct timeval	t;
 
@@ -33,10 +33,11 @@ size_t	_nsx_get_time(void)
 	return (t.tv_sec * 1000 + t.tv_usec / 1000);
 }
 
-void	_nsx_sleep(size_t ms)
+void	nsx_sleep(size_t ms)
 {
 	size_t	start_time;
 
-	start_time = _nsx_get_time();
-	while ((_nsx_get_time() - start_time) < ms);
+	start_time = nsx_get_time();
+	while ((nsx_get_time() - start_time) < ms)
+		usleep(100);
 }
