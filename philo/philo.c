@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:21:41 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/03 21:54:31 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/03 22:27:43 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	nsx_start_session(t_session *session)
 			return (-1);
 		if (pthread_detach(session->philos[i].thread))
 			return (-1);
-		usleep(50);
+		usleep(10);
 		i++;
 	}
 	nsx_detector(session);
