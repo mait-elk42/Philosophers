@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:22:12 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/03 10:35:26 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/03 21:43:04 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-# define CC "\033[0m"
-# define CB "\033[34m"
-# define CR "\033[31m"
 # define PHILO_THINK "is thinking"
 # define PHILO_EAT "is eating"
 # define PHILO_SLEEP "is sleep"
@@ -62,7 +59,7 @@ int			nsx_session_init(t_session	*session, int ac, char **av);
 void		nsx_putstr_fd(char	*str, int fd);
 void		nsx_free_session(t_session *session);
 size_t		nsx_get_time(void);
-void		nsx_sleep(size_t ms);
+void		nsx_sleep_ms(size_t ms);
 
 void		nsx_philo_think(t_philo *philo);
 void		nsx_philo_take_forks_eat(t_philo *philo);

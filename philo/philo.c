@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:21:41 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/03 10:35:55 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/03 21:54:31 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,49 +15,59 @@
 static void	*life_of_philo(void *philo_ptr)
 {
 	t_philo	*philo;
-	int		n_of_meals;
 
 	philo = (t_philo *)philo_ptr;
-	if (philo->id % 2 == 0)
-		usleep(100);
-	n_of_meals = philo->n_of_meals;
-	while (n_of_meals)
+	while (1)
 	{
+		if (philo->n_of_meals == 0)
+			return (NULL);
 		nsx_philo_think(philo);
 		nsx_philo_take_forks_eat(philo);
 		nsx_philo_sleep(philo);
-		n_of_meals = philo->n_of_meals;
+		pthread_mutex_lock(&philo->n_meals_mutex);
+		pthread_mutex_unlock(&philo->n_meals_mutex);
 	}
 	return (NULL);
+}
+
+static int	someone_died(t_session *session, int i)
+{
+	size_t	meal_time;
+
+	pthread_mutex_lock(&session->philos[i].last_meal_time_mutex);
+	meal_time = nsx_get_time() - session->philos[i].last_meal_time;
+	if (session->philos[i].n_of_meals
+		&& meal_time >= (size_t)session->data.time_die)
+	{
+		pthread_mutex_lock(&session->printf_mutex);
+		printf("%zu %d is died\n", meal_time, session->philos[i].id);
+		nsx_sleep_ms(10);
+		return (1);
+	}
+	pthread_mutex_unlock(&session->philos[i++].last_meal_time_mutex);
+	return (0);
 }
 
 static void	nsx_detector(t_session *session)
 {
 	int		i;
 	int		j;
-	size_t	meal_time;
 
-	i = 0;
-	j = 0;
 	while (1)
 	{
-		pthread_mutex_lock(&session->philos[i].n_meals_mutex);
-		j += (session->philos[i].n_of_meals == 0);
-		pthread_mutex_unlock(&session->philos[i].n_meals_mutex);
-		pthread_mutex_lock(&session->philos[i].last_meal_time_mutex);
-		meal_time = nsx_get_time() - session->philos[i].last_meal_time;
-		if (meal_time >= (size_t)session->data.time_die)
+		i = 0;
+		j = 0;
+		while (i < session->data.num_philos)
 		{
-			pthread_mutex_lock(&session->printf_mutex);
-			printf(CR"%zu %d is died\n"CC, meal_time, session->philos[i].id);
-			nsx_sleep(10);
-			return ;
+			pthread_mutex_lock(&session->philos[i].n_meals_mutex);
+			j += (session->philos[i].n_of_meals == 0);
+			pthread_mutex_unlock(&session->philos[i].n_meals_mutex);
+			if (someone_died(session, i))
+				return ;
+			i++;
 		}
-		pthread_mutex_unlock(&session->philos[i++].last_meal_time_mutex);
 		if (j == session->data.num_philos)
-			break ;
-		i *= (i < session->data.num_philos);
-		j *= (i < session->data.num_philos);
+			return ;
 	}
 }
 
@@ -73,6 +83,7 @@ static int	nsx_start_session(t_session *session)
 			return (-1);
 		if (pthread_detach(session->philos[i].thread))
 			return (-1);
+		usleep(50);
 		i++;
 	}
 	nsx_detector(session);
@@ -85,14 +96,12 @@ int	main(int ac, char **av)
 
 	session.forks = NULL;
 	session.philos = NULL;
-	printf(CB);
 	if (nsx_session_init(&session, ac, av) == -1)
 		return (nsx_free_session(&session),
-			nsx_putstr_fd(CR"Error\n"CC, 2), EXIT_FAILURE);
+			nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
 	if (nsx_start_session(&session) == -1)
 		return (nsx_free_session(&session),
-			nsx_putstr_fd(CR"Error\n"CC, 2), EXIT_FAILURE);
-	free(session.philos);
-	free(session.forks);
+			nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
+	nsx_free_session(&session);
 	return (0);
 }
