@@ -6,13 +6,11 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:21:41 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/02 23:17:21 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/03 10:35:55 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
-
-ADD ANOTHER MUTEXES INSIDE PHILO STRUCT NAMED MUTEX_TIME_MEALS AND MUTEX_N_MEALS
 
 static void	*life_of_philo(void *philo_ptr)
 {
@@ -20,8 +18,8 @@ static void	*life_of_philo(void *philo_ptr)
 	int		n_of_meals;
 
 	philo = (t_philo *)philo_ptr;
-	// if (philo->id % 2 == 0)
-	// 	usleep(1000);
+	if (philo->id % 2 == 0)
+		usleep(100);
 	n_of_meals = philo->n_of_meals;
 	while (n_of_meals)
 	{
@@ -43,23 +41,23 @@ static void	nsx_detector(t_session *session)
 	j = 0;
 	while (1)
 	{
-		pthread_mutex_lock(&session->printf_mutex);
-		usleep(50);
-		pthread_mutex_lock(&session->philos[i].meals_mutex);
+		pthread_mutex_lock(&session->philos[i].n_meals_mutex);
 		j += (session->philos[i].n_of_meals == 0);
+		pthread_mutex_unlock(&session->philos[i].n_meals_mutex);
+		pthread_mutex_lock(&session->philos[i].last_meal_time_mutex);
 		meal_time = nsx_get_time() - session->philos[i].last_meal_time;
 		if (meal_time >= (size_t)session->data.time_die)
 		{
-			printf("%zu %d is died\n", meal_time, session->philos[i].id);
-			pthread_mutex_destroy(&session->printf_mutex);
+			pthread_mutex_lock(&session->printf_mutex);
+			printf(CR"%zu %d is died\n"CC, meal_time, session->philos[i].id);
+			nsx_sleep(10);
 			return ;
 		}
+		pthread_mutex_unlock(&session->philos[i++].last_meal_time_mutex);
 		if (j == session->data.num_philos)
 			break ;
-		pthread_mutex_unlock(&session->philos[i++].meals_mutex);
 		i *= (i < session->data.num_philos);
 		j *= (i < session->data.num_philos);
-		pthread_mutex_unlock(&session->printf_mutex);
 	}
 }
 
@@ -76,7 +74,6 @@ static int	nsx_start_session(t_session *session)
 		if (pthread_detach(session->philos[i].thread))
 			return (-1);
 		i++;
-		usleep(100);
 	}
 	nsx_detector(session);
 	return (0);
@@ -88,12 +85,13 @@ int	main(int ac, char **av)
 
 	session.forks = NULL;
 	session.philos = NULL;
+	printf(CB);
 	if (nsx_session_init(&session, ac, av) == -1)
 		return (nsx_free_session(&session),
-			nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
+			nsx_putstr_fd(CR"Error\n"CC, 2), EXIT_FAILURE);
 	if (nsx_start_session(&session) == -1)
 		return (nsx_free_session(&session),
-			nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
+			nsx_putstr_fd(CR"Error\n"CC, 2), EXIT_FAILURE);
 	free(session.philos);
 	free(session.forks);
 	return (0);

@@ -6,14 +6,14 @@
 #    By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/26 10:25:15 by mait-elk          #+#    #+#              #
-#    Updated: 2024/03/02 23:03:54 by mait-elk         ###   ########.fr        #
+#    Updated: 2024/03/03 09:49:00 by mait-elk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CFLAGS= -Wall -Werror -Wextra 
 CC= cc $(CFLAGS)
 INC= include/
-SRCS= srcs/utils.c srcs/initializer.c srcs/lifecycle.c
+SRCS= srcs/utils.c srcs/initializer.c srcs/philos.c
 O_SRCS= $(SRCS:.c=.o)
 NAME= philo
 

@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:22:12 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/02 23:08:53 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/03 10:35:26 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,14 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
+
+# define CC "\033[0m"
+# define CB "\033[34m"
+# define CR "\033[31m"
+# define PHILO_THINK "is thinking"
+# define PHILO_EAT "is eating"
+# define PHILO_SLEEP "is sleep"
+# define PHILO_TAKEN_A_FORK "has taken a fork"
 
 typedef struct s_data
 {
@@ -32,7 +40,8 @@ typedef struct s_philo
 {
 	t_data			cp_data;
 	pthread_mutex_t	*printf_mutex;
-	pthread_mutex_t	meals_mutex;
+	pthread_mutex_t	n_meals_mutex;
+	pthread_mutex_t	last_meal_time_mutex;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
 	pthread_t		thread;
