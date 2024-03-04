@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 22:30:40 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/04 16:59:30 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/04 19:11:40 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <pthread.h>
+# include <semaphore.h>
 # include <sys/time.h>
 
 typedef struct s_data
@@ -30,6 +31,7 @@ typedef struct s_data
 typedef struct s_philo
 {
 	pid_t	pid;
+	int		id;
 }	t_philo;
 
 
