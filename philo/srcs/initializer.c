@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:51:06 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/03 16:58:29 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/03 22:58:45 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	nsx_atoi(char *num)
 	return (sign * r);
 }
 
-static int	nsx_session_init3(t_session *session)
+static int	nsx_session_init_philos(t_session *session)
 {
 	t_data			data;
 	int				i;
@@ -66,7 +66,7 @@ static int	nsx_session_init3(t_session *session)
 	return (0);
 }
 
-static int	nsx_session_init2(t_session *session)
+static int	nsx_session_init_mutexes(t_session *session)
 {
 	t_data			s_data;
 	int				i;
@@ -85,10 +85,10 @@ static int	nsx_session_init2(t_session *session)
 		}
 		i++;
 	}
-	return (nsx_session_init3(session));
+	return (nsx_session_init_philos(session));
 }
 
-int	nsx_session_init(t_session	*session, int ac, char **av)
+int	nsx_session_check_args(t_session	*session, int ac, char **av)
 {
 	if (ac != 5 && ac != 6)
 		return (-1);
@@ -114,5 +114,5 @@ int	nsx_session_init(t_session	*session, int ac, char **av)
 	session->forks = malloc(sizeof(pthread_mutex_t) * session->data.num_philos);
 	if (!session->forks)
 		return (-1);
-	return (nsx_session_init2(session));
+	return (nsx_session_init_mutexes(session));
 }

@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:22:12 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/03 21:43:04 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/03 22:59:28 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ typedef struct s_session
 	t_data			data;
 }	t_session;
 
-int			nsx_session_init(t_session	*session, int ac, char **av);
+int			nsx_session_check_args(t_session	*session, int ac, char **av);
+
 void		nsx_putstr_fd(char	*str, int fd);
 void		nsx_free_session(t_session *session);
 size_t		nsx_get_time(void);

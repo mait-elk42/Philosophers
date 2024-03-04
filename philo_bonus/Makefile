@@ -6,23 +6,23 @@
 #    By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/26 10:25:15 by mait-elk          #+#    #+#              #
-#    Updated: 2024/03/03 22:32:13 by mait-elk         ###   ########.fr        #
+#    Updated: 2024/03/04 16:39:50 by mait-elk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CFLAGS= -Wall -Werror -Wextra
-CC= cc $(CFLAGS)
+CC= cc
 INC= include/
-SRCS= 
+SRCS= srcs/utils.c srcs/args_checker.c srcs/initializer.c
 O_SRCS= $(SRCS:.c=.o)
-NAME= philo
+NAME= philo_bonus
 
 all: $(NAME)
 
-$(NAME): $(O_SRCS) $(NAME).c $(INC)philo.h
+$(NAME): $(O_SRCS) $(NAME).c $(INC)$(NAME).h
 	$(CC) $(NAME).c $(O_SRCS) -o $(NAME) -I $(INC)
 
-srcs/%.o: srcs/%.c $(INC)philo.h
+srcs/%.o: srcs/%.c $(INC)$(NAME).h
 	$(CC) -c $< -o $@ -I $(INC)
 
 clean:

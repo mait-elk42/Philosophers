@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:21:41 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/03 22:27:43 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/03 23:13:50 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	main(int ac, char **av)
 
 	session.forks = NULL;
 	session.philos = NULL;
-	if (nsx_session_init(&session, ac, av) == -1)
+	if (nsx_session_check_args(&session, ac, av) == -1)
 		return (nsx_free_session(&session),
 			nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
 	if (nsx_start_session(&session) == -1)
