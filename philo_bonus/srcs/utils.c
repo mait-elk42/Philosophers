@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 10:48:24 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/04 11:27:54 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/05 22:35:59 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,47 @@ int	nsx_atoi(char *num)
 	return (sign * r);
 }
 
-int		nsx_put_error()
+char	*nsx_itoa(int num)
 {
-	printf("Error\n");
-	return (-1);
+	char	*res;
+	int		i;
+	int		tmpnum;
+
+	i = 0;
+	if (num <= 0)
+		return (NULL);
+	tmpnum = num;
+	while (tmpnum)
+	{
+		i++;
+		tmpnum /= 10;
+	}
+	res = malloc(i + 1);
+	if (!res)
+		return (NULL);
+	res[i--] = '\0';
+	while (num)
+	{
+		res[i--] = (num % 10) + 48;
+		num /= 10;
+	}
+	return (res);
 }
+
+size_t	nsx_get_time(void)
+{
+	struct timeval	t;
+
+	gettimeofday(&t, NULL);
+	return (t.tv_sec * 1000 + t.tv_usec / 1000);
+}
+
+void	nsx_sleep_ms(size_t ms)
+{
+	size_t	start_time;
+
+	start_time = nsx_get_time();
+	while ((nsx_get_time() - start_time) < ms)
+		usleep(100);
+}
+
