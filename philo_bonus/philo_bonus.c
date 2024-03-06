@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:28:13 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/06 00:10:48 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/06 19:08:08 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,21 @@
 void	*dead_thread(void *p)
 {
 	t_philo	*philo;
+	size_t	last_meal_time;
 
 	philo = (t_philo *)p;
 	while (1)
 	{
-		sem_wait(philo->n_of_meals_lock);
-		if (nsx_get_time() - philo->last_meal_time >= (size_t)philo->data.time_die)
-			kill(getpid(), SIGINT);
-		sem_post(philo->n_of_meals_lock);
+		sem_wait(philo->lock);
+		last_meal_time = nsx_get_time() - philo->last_meal_time;
+		if (philo->n_of_meals &&
+			last_meal_time >= (size_t)philo->data.time_die)
+		{
+			sem_wait(philo->data.printf_lock);
+			printf("%zu %d is died\n", last_meal_time, philo->id);
+			exit(13);
+		}
+		sem_post(philo->lock);
 	}
 }
 
@@ -43,18 +50,17 @@ int	philo_life(t_philo *philo)
 		nsx_sleep_ms(philo->data.time_eat);
 		sem_post(philo->data.forks_lock);
 		sem_post(philo->data.forks_lock);
-		sem_wait(philo->n_of_meals_lock);
+		sem_wait(philo->lock);
 		philo->last_meal_time = nsx_get_time();
 		if (philo->n_of_meals != -1)
 			philo->n_of_meals++;
 		if (philo->n_of_meals == philo->data.num_meals)
-			return (1);
-		sem_post(philo->n_of_meals_lock);
+			exit(10);
+		sem_post(philo->lock);
 		nsx_put_philo_status(philo, "is sleep");
 		nsx_sleep_ms(philo->data.time_sleep);
 		nsx_put_philo_status(philo, "is thinking");
 	}
-	return (10);
 }
 
 int main(int ac, char **av)
@@ -83,7 +89,11 @@ int main(int ac, char **av)
 	while (waitpid(-1, &ret, 0) != -1)
 	{
 		ret = WEXITSTATUS(ret);
-		printf("return %d\n", ret);
+		if (ret == 13)
+			return (EXIT_SUCCESS);
+		if (ret == 37)
+			return (EXIT_FAILURE);
+		// printf("return %d\n", ret);
 	}
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 22:30:40 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/06 00:01:39 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/06 10:37:29 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_philo
 	pid_t	pid;
 	size_t	last_meal_time;
 	int		n_of_meals;
-	sem_t	*n_of_meals_lock;
+	sem_t	*lock;
 	int		id;
 }	t_philo;
 

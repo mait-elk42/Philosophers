@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:30:10 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/03 22:01:54 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/06 19:40:11 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,31 @@ void	nsx_sleep_ms(size_t ms)
 	size_t	start_time;
 
 	start_time = nsx_get_time();
-	while ((nsx_get_time() - start_time) < ms)
-		usleep(100);
+	while ((nsx_get_time() - start_time) < ms);
+		// usleep(100);
+}
+
+int	nsx_atoi(char *num)
+{
+	long	r;
+	int		sign;
+
+	r = 0;
+	sign = 1;
+	while ((*num >= 9 && *num <= 13) || (*num == ' '))
+		num++;
+	if (*num == '-' || *num == '+')
+	{
+		if (*num == '-')
+			sign = -1;
+		num++;
+	}
+	while (*num && (*num >= '0' && *num <= '9'))
+	{
+		r = (r * 10) + (*num - 48);
+		if ((sign == 1 && r > 2147483647) || (sign == -1 && r > 2147483648))
+			return (-1);
+		num++;
+	}
+	return (sign * r);
 }

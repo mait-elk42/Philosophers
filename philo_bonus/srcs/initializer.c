@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:14:30 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/06 00:01:22 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:21:51 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	nsx_init_session(t_session *session)
 		if (itoa_tmp == NULL)
 			return (-1);
 		sem_unlink(itoa_tmp);
-		session->philos[i].n_of_meals_lock = sem_open(itoa_tmp, O_CREAT | O_RDWR, 0666, 1);
+		session->philos[i].lock = sem_open(itoa_tmp, O_CREAT | O_RDWR, 0666, 1);
 		free(itoa_tmp);
 		i++;
 	}
