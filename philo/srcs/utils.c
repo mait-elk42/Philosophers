@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:30:10 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/06 19:40:11 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/07 22:38:44 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ void	nsx_free_session(t_session *session)
 	i = 0;
 	while (session->philos && i < session->data.num_philos)
 	{
-		pthread_mutex_destroy(&session->philos[i].n_meals_mutex);
-		pthread_mutex_destroy(&session->philos[i].last_meal_time_mutex);
+		pthread_mutex_destroy(&session->philos[i].meal_mutex);
 		i++;
 	}
 	free(session->forks);

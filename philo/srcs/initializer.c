@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:51:06 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/06 20:28:00 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/07 22:38:42 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,21 @@ int	nsx_init_philos(t_session *session)
 {
 	int				i;
 
-	i = 0;
 	session->philos = malloc(sizeof(t_philo) * session->data.num_philos);
+	if (session->philos == NULL)
+		return (-1);
 	session->data.start_time = nsx_get_time();
+	session->someone_died = 0;
+	i = 0;
 	while (i < session->data.num_philos)
 	{
 		session->philos[i].id = i + 1;
 		session->philos[i].n_of_meals = session->data.num_meals;
 		session->philos[i].cp_data = session->data;
 		session->philos[i].last_meal_time = session->data.start_time;
+		session->philos[i].someone_died = &session->someone_died;
 		session->philos[i].printf_mutex = &session->printf_mutex;
-		if (pthread_mutex_init(&session->philos[i].last_meal_time_mutex, NULL))
-			return (-1);
-		if (pthread_mutex_init(&session->philos[i].n_meals_mutex, NULL))
+		if (pthread_mutex_init(&session->philos[i].meal_mutex, NULL))
 			return (-1);
 		if (i == 0)
 			session->philos[i].left_fork = &session->forks[session->data.num_philos - 1];
@@ -42,10 +44,12 @@ int	nsx_init_philos(t_session *session)
 
 int	nsx_init_mutexes(t_session *session)
 {
-	int				i;
+	int	i;
 
 	i = 0;
-	session->forks = malloc(sizeof())
+	session->forks = malloc(sizeof(pthread_mutex_t) * session->data.num_philos);
+	if (session->forks == NULL)
+		return (-1);
 	if (pthread_mutex_init(&session->printf_mutex, NULL))
 		return (-1);
 	while (i < session->data.num_philos)
