@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 16:42:32 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/08 12:36:27 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:52:34 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 int	nsx_put_philo_status(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(philo->printf_mutex);
-	if (*philo->someone_died == 1)
+	if (*philo->someone_died)
 		return (pthread_mutex_unlock(philo->printf_mutex), 1);
-	printf("%zu %d %s\n", nsx_get_time()
-		- philo->cp_data.start_time, philo->id, msg);
+	printf("%zu %d %s\n", nsx_get_time() - philo->cp_data.start_time, philo->id, msg);
 	pthread_mutex_unlock(philo->printf_mutex);
 	return (0);
 }

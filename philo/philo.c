@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:21:41 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/08 12:43:13 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:56:44 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,10 @@ void	func_dieosf(t_session *session, size_t	mt, int i)
 {
 	pthread_mutex_lock(&session->printf_mutex);
 	session->someone_died = 1;
-	printf("%zu %d is died\n", mt, session->philos[i].id);
 	pthread_mutex_unlock(&session->printf_mutex);
+	printf("%zu %d is died\n", mt, session->philos[i].id);
 	pthread_mutex_unlock(&session->philos[i].meal_mutex);
+	pthread_mutex_unlock(session->philos[i].left_fork);
 }
 
 static void	nsx_detector(t_session *session)
