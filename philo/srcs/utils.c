@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:30:10 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/08 15:57:33 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/08 17:00:08 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	nsx_sleep_ms(size_t ms, t_philo	*philo)
 		if (*philo->someone_died)
 			return (pthread_mutex_unlock(philo->printf_mutex), (void)0);
 		pthread_mutex_unlock(philo->printf_mutex);
-		usleep(500);
+		usleep(50);
 	}
 }
 

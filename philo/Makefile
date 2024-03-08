@@ -6,11 +6,11 @@
 #    By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/26 10:25:15 by mait-elk          #+#    #+#              #
-#    Updated: 2024/03/07 23:21:50 by mait-elk         ###   ########.fr        #
+#    Updated: 2024/03/08 16:53:47 by mait-elk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS= -Wall -Werror -Wextra 
+CFLAGS= -Wall -Werror -Wextra
 CC= cc $(CFLAGS)
 INC= include/
 SRCS= srcs/utils.c srcs/initializer.c srcs/philos.c

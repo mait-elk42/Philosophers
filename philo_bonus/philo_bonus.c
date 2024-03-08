@@ -6,14 +6,13 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:28:13 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/06 19:08:08 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/08 18:51:50 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo_bonus.h>
-// #TODO : KILL THE MAIN PROCESS IF SOMEONE DIED OR DO SOMETHING TO FINISH THE PROGRAM
 
-void	*dead_thread(void *p)
+void	*death_thread(void *p)
 {
 	t_philo	*philo;
 	size_t	last_meal_time;
@@ -38,7 +37,7 @@ int	philo_life(t_philo *philo)
 {
 	pthread_t	death_check;
 
-	pthread_create(&death_check, NULL, &dead_thread, philo);
+	pthread_create(&death_check, NULL, &death_thread, philo);
 	pthread_detach(death_check);
 	while (1)
 	{
@@ -63,6 +62,20 @@ int	philo_life(t_philo *philo)
 	}
 }
 
+void	kill_all_chproc(t_philo	*philos, int ret)
+{
+	int	i;
+
+	i = 0;
+	if (ret == 13)
+	{
+		int i = 0;
+		while (i < philos->data.num_philos)
+			kill(philos[i++].pid, SIGINT);
+		exit (EXIT_SUCCESS);
+	}
+}
+
 int main(int ac, char **av)
 {
 	t_session	session;
@@ -77,7 +90,6 @@ int main(int ac, char **av)
 			return (free(session.philos), EXIT_FAILURE);
 		while (i < session.data.num_philos)
 		{
-			// printf("%d\n", (int)session.philos[i].n_of_meals_lock);
 			session.philos[i].pid = fork();
 			if (session.philos[i].pid == 0)
 				return (philo_life(&session.philos[i]));
@@ -87,13 +99,6 @@ int main(int ac, char **av)
 	else
 		return (printf("Error\n"), EXIT_FAILURE);
 	while (waitpid(-1, &ret, 0) != -1)
-	{
-		ret = WEXITSTATUS(ret);
-		if (ret == 13)
-			return (EXIT_SUCCESS);
-		if (ret == 37)
-			return (EXIT_FAILURE);
-		// printf("return %d\n", ret);
-	}
+		kill_all_chproc(session.philos, WEXITSTATUS(ret));
 	return (EXIT_SUCCESS);
 }
