@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:22:12 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/07 23:19:49 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/08 11:54:35 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,9 @@ int			nsx_init_mutexes(t_session *session);
 void		nsx_putstr_fd(char	*str, int fd);
 void		nsx_free_session(t_session *session);
 size_t		nsx_get_time(void);
-void		nsx_sleep_ms(size_t ms);
+void		nsx_sleep_ms(size_t ms, t_philo	*philo);
 
+int			nsx_put_philo_status(t_philo *philo, char *msg);
 int			nsx_philo_think(t_philo *philo);
 int			nsx_philo_take_forks_eat(t_philo *philo);
 int			nsx_philo_sleep(t_philo *philo);

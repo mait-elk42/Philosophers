@@ -6,11 +6,20 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:51:06 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/07 22:38:42 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/08 00:02:07 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
+
+void	init_left_fork(t_session *session, int i)
+{
+	if (i == 0)
+		session->philos[i].left_fork
+			= &session->forks[session->data.num_philos - 1];
+	else
+		session->philos[i].left_fork = &session->forks[i - 1];
+}
 
 int	nsx_init_philos(t_session *session)
 {
@@ -32,10 +41,7 @@ int	nsx_init_philos(t_session *session)
 		session->philos[i].printf_mutex = &session->printf_mutex;
 		if (pthread_mutex_init(&session->philos[i].meal_mutex, NULL))
 			return (-1);
-		if (i == 0)
-			session->philos[i].left_fork = &session->forks[session->data.num_philos - 1];
-		else
-			session->philos[i].left_fork = &session->forks[i - 1];
+		init_left_fork(session, i);
 		session->philos[i].right_fork = &session->forks[i];
 		i++;
 	}

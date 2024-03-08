@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:30:10 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/07 22:38:44 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/08 12:44:55 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,20 @@ size_t	nsx_get_time(void)
 	return (t.tv_sec * 1000 + t.tv_usec / 1000);
 }
 
-void	nsx_sleep_ms(size_t ms)
+void	nsx_sleep_ms(size_t ms, t_philo	*philo)
 {
 	size_t	start_time;
 
+	(void)philo;
 	start_time = nsx_get_time();
-	while ((nsx_get_time() - start_time) < ms);
-		// usleep(100);
+	while ((nsx_get_time() - start_time) < ms)
+	{
+		pthread_mutex_lock(philo->printf_mutex);
+		if (*philo->someone_died)
+			return (pthread_mutex_unlock(philo->printf_mutex), (void)0);
+		pthread_mutex_unlock(philo->printf_mutex);
+		usleep(500);
+	}
 }
 
 int	nsx_atoi(char *num)
