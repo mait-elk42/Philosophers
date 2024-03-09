@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:28:13 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/09 14:40:05 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/09 17:07:14 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static void	nsx_free_all_exit(t_session *session)
 {
-	int	i;
+	char	*itoa_hhhh;
+	int		i;
 
 	i = 0;
 	sem_close(session->philos->data.forks_lock);
@@ -24,6 +25,9 @@ static void	nsx_free_all_exit(t_session *session)
 	while (i < session->philos->data.num_philos)
 	{
 		sem_close(session->philos[i].lock);
+		itoa_hhhh = nsx_itoa(i + 3);
+		sem_unlink(itoa_hhhh);
+		free(itoa_hhhh);
 		i++;
 	}
 	free(session->philos);
