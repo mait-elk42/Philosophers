@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:21:41 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/09 00:26:15 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/09 16:54:54 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,11 @@ int	main(int ac, char **av)
 	}
 	nsx_init_data(&session.data, ac, av);
 	if (nsx_init_mutexes(&session) == -1)
-		return (nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
+		return (nsx_free_session(&session),
+			nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
 	if (nsx_init_philos(&session) == -1)
-		return (nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
+		return (nsx_free_session(&session),
+			nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
 	if (nsx_start_session(&session) == -1)
 		return (nsx_free_session(&session),
 			nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
