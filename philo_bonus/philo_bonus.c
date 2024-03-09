@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:28:13 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/09 12:47:47 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/09 14:23:53 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@ static void	nsx_free_all_exit(t_session *session)
 {
 	int	i;
 
-	i  = 0;
+	i = 0;
+	sem_close(session->philos->data.forks_lock);
+	sem_close(session->philos->data.printf_lock);
+	sem_unlink("printf_lock");
+	sem_unlink("forks_lock");
 	while (i < session->philos->data.num_philos)
 	{
-		sem_close(session->philos->data.forks_lock);
-		sem_close(session->philos->data.printf_lock);
-		sem_close(session->philos->lock);
+		sem_close(session->philos[i].lock);
 		i++;
 	}
 	free(session->philos);
@@ -100,9 +102,10 @@ int	main(int ac, char **av)
 	i = 0;
 	if (nsx_valid_args(ac, av) != -1)
 	{
-		nsx_init_data(&session.data, ac, av);
+		if (nsx_init_data(&session.data, ac, av) == -1)
+			return (EXIT_FAILURE);
 		if (nsx_init_session(&session) == -1)
-			return (free(session.philos), EXIT_FAILURE);
+			return (nsx_free_all_exit(&session), EXIT_FAILURE);
 		while (i < session.data.num_philos)
 		{
 			session.philos[i].pid = fork();

@@ -6,13 +6,13 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:14:30 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/09 12:44:00 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/09 14:23:29 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo_bonus.h>
 
-void	nsx_init_data(t_data *data, int ac, char **av)
+int	nsx_init_data(t_data *data, int ac, char **av)
 {
 	data->num_philos = nsx_atoi(av[1]);
 	data->time_die = nsx_atoi(av[2]);
@@ -26,8 +26,13 @@ void	nsx_init_data(t_data *data, int ac, char **av)
 	sem_unlink("forks_lock");
 	data->printf_lock = sem_open("printf_lock",
 			O_CREAT | O_RDWR, 0666, 1);
+	if (data->printf_lock == SEM_FAILED)
+		return (-1);
 	data->forks_lock = sem_open("forks_lock",
 			O_CREAT | O_RDWR, 0666, data->num_philos);
+	if (data->forks_lock == SEM_FAILED)
+		return (sem_close(data->printf_lock), -1);
+	return (0);
 }
 
 int	nsx_init_session(t_session *session)
