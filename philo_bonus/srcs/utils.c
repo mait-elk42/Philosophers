@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 10:48:24 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/05 22:35:59 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/08 19:22:43 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,3 @@ void	nsx_sleep_ms(size_t ms)
 	while ((nsx_get_time() - start_time) < ms)
 		usleep(100);
 }
-

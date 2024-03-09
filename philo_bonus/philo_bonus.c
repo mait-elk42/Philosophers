@@ -6,11 +6,27 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:28:13 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/08 18:51:50 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/09 00:59:47 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo_bonus.h>
+
+static void	nsx_free_all_exit(t_session *session)
+{
+	int	i;
+
+	i  = 0;
+	while (i < session->philos->data.num_philos)
+	{
+		sem_close(session->philos->data.forks_lock);
+		sem_close(session->philos->data.printf_lock);
+		sem_close(session->philos->lock);
+		i++;
+	}
+	free(session->philos);
+	exit(EXIT_SUCCESS);
+}
 
 void	*death_thread(void *p)
 {
@@ -22,8 +38,8 @@ void	*death_thread(void *p)
 	{
 		sem_wait(philo->lock);
 		last_meal_time = nsx_get_time() - philo->last_meal_time;
-		if (philo->n_of_meals &&
-			last_meal_time >= (size_t)philo->data.time_die)
+		if (philo->n_of_meals
+			&& last_meal_time >= (size_t)philo->data.time_die)
 		{
 			sem_wait(philo->data.printf_lock);
 			printf("%zu %d is died\n", last_meal_time, philo->id);
@@ -52,9 +68,9 @@ int	philo_life(t_philo *philo)
 		sem_wait(philo->lock);
 		philo->last_meal_time = nsx_get_time();
 		if (philo->n_of_meals != -1)
-			philo->n_of_meals++;
-		if (philo->n_of_meals == philo->data.num_meals)
-			exit(10);
+			philo->n_of_meals--;
+		if (philo->n_of_meals == 0)
+			exit(0);
 		sem_post(philo->lock);
 		nsx_put_philo_status(philo, "is sleep");
 		nsx_sleep_ms(philo->data.time_sleep);
@@ -62,21 +78,20 @@ int	philo_life(t_philo *philo)
 	}
 }
 
-void	kill_all_chproc(t_philo	*philos, int ret)
+void	kill_all_chproc(t_session	*session, int ret)
 {
 	int	i;
 
 	i = 0;
 	if (ret == 13)
 	{
-		int i = 0;
-		while (i < philos->data.num_philos)
-			kill(philos[i++].pid, SIGINT);
-		exit (EXIT_SUCCESS);
+		while (i < session->philos->data.num_philos)
+			kill(session->philos[i++].pid, SIGINT);
+		nsx_free_all_exit(session);
 	}
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_session	session;
 	int			ret;
@@ -99,6 +114,7 @@ int main(int ac, char **av)
 	else
 		return (printf("Error\n"), EXIT_FAILURE);
 	while (waitpid(-1, &ret, 0) != -1)
-		kill_all_chproc(session.philos, WEXITSTATUS(ret));
+		kill_all_chproc(&session, WEXITSTATUS(ret));
+	nsx_free_all_exit(&session);
 	return (EXIT_SUCCESS);
 }

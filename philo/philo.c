@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:21:41 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/08 16:41:44 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/09 00:26:15 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ static void	*life_of_philo(void *philo_ptr)
 	philo = (t_philo *)philo_ptr;
 	while (1)
 	{
-		nsx_philo_take_forks_eat(philo);
-		pthread_mutex_lock(&philo->meal_mutex);
-		if (philo->n_of_meals == 0)
-			return (pthread_mutex_unlock(&philo->meal_mutex), NULL);
-		pthread_mutex_unlock(&philo->meal_mutex);
+		pthread_mutex_lock(philo->printf_mutex);
+		if (*philo->someone_died)
+			return (pthread_mutex_unlock(philo->printf_mutex), NULL);
+		pthread_mutex_unlock(philo->printf_mutex);
+		if (nsx_philo_take_forks_eat(philo))
+			return (NULL);
 		nsx_put_philo_status(philo, PHILO_SLEEP);
 		nsx_sleep_ms(philo->cp_data.time_sleep, philo);
-		if (nsx_put_philo_status(philo, PHILO_THINK))
-			return (NULL);
+		nsx_put_philo_status(philo, PHILO_THINK);
 	}
 	return (NULL);
 }

@@ -6,12 +6,12 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 22:30:40 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/06 10:37:29 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/09 00:43:49 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_BONUS_H
-#define PHILO_BONUS_H
+# define PHILO_BONUS_H
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -35,10 +35,10 @@ typedef struct s_data
 typedef struct s_philo
 {
 	t_data	data;
+	sem_t	*lock;
 	pid_t	pid;
 	size_t	last_meal_time;
 	int		n_of_meals;
-	sem_t	*lock;
 	int		id;
 }	t_philo;
 
@@ -47,7 +47,6 @@ typedef struct s_session
 	t_philo	*philos;
 	t_data	data;
 }	t_session;
-
 
 void	nsx_init_data(t_data *data, int ac, char **av);
 int		nsx_init_session(t_session *session);

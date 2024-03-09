@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:14:30 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/06 11:21:51 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/08 19:24:54 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,16 @@ void	nsx_init_data(t_data *data, int ac, char **av)
 	data->start_time = nsx_get_time();
 	sem_unlink("printf_lock");
 	sem_unlink("forks_lock");
-	data->printf_lock = sem_open("printf_lock", O_CREAT | O_RDWR, 0666, 1);
-	data->forks_lock =  sem_open("forks_lock",
-		O_CREAT | O_RDWR, 0666, data->num_philos);
+	data->printf_lock = sem_open("printf_lock",
+			O_CREAT | O_RDWR, 0666, 1);
+	data->forks_lock = sem_open("forks_lock",
+			O_CREAT | O_RDWR, 0666, data->num_philos);
 }
 
 int	nsx_init_session(t_session *session)
 {
-	int	i;
 	char	*itoa_tmp;
+	int		i;
 
 	session->philos = malloc(sizeof(t_philo) * session->data.num_philos);
 	if (session->philos == NULL)
@@ -40,11 +41,11 @@ int	nsx_init_session(t_session *session)
 	i = 0;
 	while (i < session->data.num_philos)
 	{
-		session->philos[i].id = i+1;
+		session->philos[i].id = i +1;
 		session->philos[i].last_meal_time = session->data.start_time;
-		session->philos[i].n_of_meals = 0;
+		session->philos[i].n_of_meals = session->data.num_meals;
 		session->philos[i].data = session->data;
-		itoa_tmp = nsx_itoa(i+1);
+		itoa_tmp = nsx_itoa(i +1);
 		if (itoa_tmp == NULL)
 			return (-1);
 		sem_unlink(itoa_tmp);
