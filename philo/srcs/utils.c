@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:30:10 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/09 19:54:32 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/10 10:18:15 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ void	nsx_free_session(t_session *session)
 	i = 0;
 	pthread_mutex_destroy(&session->printf_mutex);
 	while (session->forks && i < session->data.num_philos)
-		pthread_mutex_destroy(&session->forks[i++]);
+	{
+		pthread_mutex_destroy(&session->forks[i]);
+		i++;
+	}
 	i = 0;
 	while (session->philos && i < session->data.num_philos)
 	{
@@ -49,7 +52,6 @@ void	nsx_sleep_ms(size_t ms, t_philo	*philo)
 {
 	size_t	start_time;
 
-	(void)philo;
 	start_time = nsx_get_time();
 	while ((nsx_get_time() - start_time) < ms)
 	{

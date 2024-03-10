@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:22:12 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/09 19:56:22 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/10 10:28:24 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_session
 	t_data			data;
 }	t_session;
 
+int			nsx_check_args(int ac, char **av);
 void		nsx_init_data(t_data *data, int ac, char **av);
 int			nsx_init_philos(t_session *session);
 int			nsx_init_mutexes(t_session *session);
@@ -66,9 +67,7 @@ size_t		nsx_get_time(void);
 void		nsx_sleep_ms(size_t ms, t_philo	*philo);
 
 int			nsx_put_philo_status(t_philo *philo, char *msg);
-int			nsx_philo_think(t_philo *philo);
 int			nsx_philo_take_forks_eat(t_philo *philo);
-int			nsx_philo_sleep(t_philo *philo);
 
 int			nsx_atoi(char *num);
 

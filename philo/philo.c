@@ -6,7 +6,7 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:21:41 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/09 19:55:36 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/10 10:34:42 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,17 +98,11 @@ static int	nsx_start_session(t_session *session)
 int	main(int ac, char **av)
 {
 	t_session	session;
-	int			i;
 
-	i = 1;
-	if (ac != 5 && ac != 6)
+	session.philos = NULL;
+	session.forks = NULL;
+	if (nsx_check_args(ac, av) == -1)
 		return (nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
-	while (i < ac)
-	{
-		if (nsx_atoi(av[i]) <= 0)
-			return (nsx_putstr_fd("Error\n", 2), EXIT_FAILURE);
-		i++;
-	}
 	nsx_init_data(&session.data, ac, av);
 	if (nsx_init_mutexes(&session) == -1)
 		return (nsx_free_session(&session),

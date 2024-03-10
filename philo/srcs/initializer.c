@@ -6,11 +6,27 @@
 /*   By: mait-elk <mait-elk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 10:51:06 by mait-elk          #+#    #+#             */
-/*   Updated: 2024/03/09 19:53:36 by mait-elk         ###   ########.fr       */
+/*   Updated: 2024/03/10 10:29:37 by mait-elk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
+
+int	nsx_check_args(int ac, char **av)
+{
+	int	i;
+
+	i = 1;
+	if (ac != 5 && ac != 6)
+		return (-1);
+	while (i < ac)
+	{
+		if (nsx_atoi(av[i]) <= 0)
+			return (-1);
+		i++;
+	}
+	return (0);
+}
 
 void	init_left_fork(t_session *session, int i)
 {
